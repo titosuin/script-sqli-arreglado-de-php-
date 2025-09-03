@@ -1,0 +1,31 @@
+# script-sqli-arreglado-de-php-
+Este es el script arreglado de s4vitar de la clase sqli
+<?php
+// Configuración
+$server = "localhost";
+$username = "martincito";
+$password = "martin123";
+$database = "martin";
+
+// Mostrar errores en pantalla
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Habilitar excepciones de mysqli
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+// Conexión
+$conn = new mysqli($server, $username, $password, $database);
+
+// Obtener parámetro
+$id = $_GET['id'];
+
+try {
+    // Consulta vulnerable
+    $data = mysqli_query($conn, "select username from users where id = '$id'");
+    $response = mysqli_fetch_array($data);
+    echo $response['username'];
+} catch (mysqli_sql_exception $e) {
+    die("SQL Error: " . $e->getMessage());
+}
+?>
